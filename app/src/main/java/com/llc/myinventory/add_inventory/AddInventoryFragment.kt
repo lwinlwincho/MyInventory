@@ -27,26 +27,40 @@ class AddInventoryFragment : Fragment() {
         return binding.root
     }
 
+    //return true if the edit text are not empty
+    private fun isEntryValid(): Boolean {
+        return viewModel.isEntryValid(
+            binding.edtItemName.text.toString(),
+            binding.edtItemPrice.text.toString(),
+            binding.edtItemQuantity.text.toString(),
+        )
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val appDatabase = InventoryItemRoomDatabase.getDatabase(requireContext())
 
         binding.saveAction.setOnClickListener {
+            if (isEntryValid()) {
+                viewModel.addInventory(
+                    appDatabase = appDatabase,
+                    itemName = binding.edtItemName.text.toString(),
+                    itemPrice = binding.edtItemPrice.text.toString(),
+                    quantityInStock = binding.edtItemQuantity.text.toString()
+                )
+                val action = AddInventoryFragmentDirections.actionAddInventoryFragmentToInventoryListFragment()
+                findNavController().navigate(action)
 
-            viewModel.addInventory(
-                appDatabase = appDatabase,
-                itemName = binding.edtItemName.text.toString(),
-                itemPrice = binding.edtItemPrice.text.toString(),
-                quantityInStock = binding.edtItemQuantity.text.toString()
-            )
+
+            }
         }
 
         viewModel.inputUiEvent.observe(viewLifecycleOwner) {
             when (it) {
                 is InputInentoryEvent.Success -> {
                     Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
-                    findNavController().navigateUp()
+                   // findNavController().navigateUp()
                 }
                 is InputInentoryEvent.Failure -> {
                     Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()

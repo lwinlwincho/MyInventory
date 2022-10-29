@@ -9,7 +9,11 @@
         android:id="@+id/addInventoryFragment"
         android:name="com.llc.myinventory.add_inventory.AddInventoryFragment"
         android:label="fragment_add_inventory"
-        tools:layout="@layout/fragment_add_inventory" />
+        tools:layout="@layout/fragment_add_inventory" >
+        <action
+            android:id="@+id/action_addInventoryFragment_to_inventoryListFragment"
+            app:destination="@id/inventoryListFragment" />
+    </fragment>
     <fragment
         android:id="@+id/inventoryListFragment"
         android:name="com.llc.myinventory.inventorylist.InventoryListFragment"

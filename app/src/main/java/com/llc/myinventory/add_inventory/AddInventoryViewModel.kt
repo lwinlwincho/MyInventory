@@ -13,6 +13,13 @@ class AddInventoryViewModel:ViewModel() {
     private var _inputUiEvent = MutableLiveData<InputInentoryEvent>()
     val inputUiEvent: LiveData<InputInentoryEvent> = _inputUiEvent
 
+    fun isEntryValid(itemName: String, itemPrice: String, itemCount: String): Boolean {
+        if (itemName.isBlank() || itemPrice.isBlank() || itemCount.isBlank()) {
+            return false
+        }
+        return true
+    }
+
     fun addInventory(
         appDatabase: InventoryItemRoomDatabase,
         itemName: String,
