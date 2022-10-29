@@ -41,13 +41,6 @@ class StopScheduleFragment : Fragment() {
 
    // private lateinit var stopName: String
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-       /* arguments?.let {
-            stopName = it.getString(STOP_NAME).toString()
-        }*/
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
