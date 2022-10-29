@@ -9,11 +9,11 @@ import com.llc.myinventory.database.InventoryItemRoomDatabase
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
-class InventoryViewModel : ViewModel() {
+class InventoryListViewModel : ViewModel() {
     private var _inventoryListEvent = MutableLiveData<InventoryListEvent>()
     val inventoryListEvent: LiveData<InventoryListEvent> = _inventoryListEvent
 
-    fun getAllInvnetory(appDatabase: InventoryItemRoomDatabase) {
+    fun getAllInventory(appDatabase: InventoryItemRoomDatabase) {
         _inventoryListEvent.value = InventoryListEvent.Loading
 
         viewModelScope.launch {
@@ -29,7 +29,7 @@ class InventoryViewModel : ViewModel() {
 }
 
 sealed class InventoryListEvent {
-    data class Success(val busList: List<InventoryItemEntity>) : InventoryListEvent()
+    data class Success(val inventoryList: List<InventoryItemEntity>) : InventoryListEvent()
     data class Failure(val message: String) : InventoryListEvent()
     object Loading : InventoryListEvent()
 }

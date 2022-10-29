@@ -10,7 +10,38 @@ import com.llc.myinventory.databinding.InventoryListFragmentBinding
 
 class InventoryAdapter(
     private val onItemClicked: (InventoryItemEntity) -> Unit
-) : ListAdapter<InventoryItemEntity, InventoryAdapter.BusStopViewHolder>(DiffCallback) {
+) : ListAdapter<InventoryItemEntity, InventoryAdapter.InventoryViewHolder>(DiffCallback) {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InventoryViewHolder {
+        return InventoryViewHolder(
+            InventoryListFragmentBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
+    }
+
+    override fun onBindViewHolder(holder: InventoryViewHolder, position: Int) {
+        val currentPosition = getItem(position)
+        holder.itemView.setOnClickListener {
+            onItemClicked(currentPosition)
+        }
+        holder.bind(currentPosition)
+    }
+
+    class InventoryViewHolder(
+        private var binding: InventoryListFragmentBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(inventoryItemEntity: InventoryItemEntity) {
+            binding.apply {
+                itemName.text = inventoryItemEntity.itemName
+                itemPrice.text = inventoryItemEntity.itemPrice.toString()
+                itemQuantity.text = inventoryItemEntity.quantityInStock.toString()
+            }
+
+        }
+    }
 
     companion object {
         private val DiffCallback = object : DiffUtil.ItemCallback<InventoryItemEntity>() {
@@ -27,36 +58,6 @@ class InventoryAdapter(
             ): Boolean {
                 return oldItem == newItem
             }
-        }
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BusStopViewHolder {
-        val viewHolder = BusStopViewHolder(
-            InventoryListFragmentBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
-            )
-        )
-        viewHolder.itemView.setOnClickListener {
-            val position = viewHolder.adapterPosition
-            onItemClicked(getItem(position))
-        }
-        return viewHolder
-    }
-
-    override fun onBindViewHolder(holder: BusStopViewHolder, position: Int) {
-        holder.bind(getItem(position))
-    }
-
-    class BusStopViewHolder(
-        private var binding: InventoryListFragmentBinding
-    ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(inventoryItemEntity: InventoryItemEntity) {
-            binding.itemName.text = inventoryItemEntity.itemName
-            binding.itemPrice.text = inventoryItemEntity.itemPrice.toString()
-            binding.itemQuantity.text = inventoryItemEntity.quantityInStock.toString()
-
         }
     }
 }

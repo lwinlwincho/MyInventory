@@ -12,7 +12,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.llc.myinventory.InventoryAdapter
-import com.llc.myinventory.R
 import com.llc.myinventory.database.InventoryItemRoomDatabase
 import com.llc.myinventory.databinding.InventoryListFragmentBinding
 
@@ -23,7 +22,7 @@ class InventoryListFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
 
-    private val viewModel: InventoryViewModel by viewModels()
+    private val viewModel: InventoryListViewModel by viewModels()
 
     // create database
     private val appDatabase by lazy {
@@ -45,20 +44,20 @@ class InventoryListFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         val inventoryAdapter = InventoryAdapter {
-            /*val action =
-                Inventory.actionFullScheduleFragmentToStopScheduleFragment(
-                    stopName = it.busName
+            val action =
+                InventoryListFragmentDirections.actionInventoryListFragmentToDetailInventoryFragment(
+                    id = it.id
                 )
-            view.findNavController().navigate(action)*/
+            view.findNavController().navigate(action)
         }
 
         recyclerView.adapter=inventoryAdapter
-        viewModel.getAllInvnetory(appDatabase)
+        viewModel.getAllInventory(appDatabase)
         viewModel.inventoryListEvent.observe(viewLifecycleOwner) {
             when (it) {
                 is InventoryListEvent.Loading -> {}
                 is InventoryListEvent.Success -> {
-                    inventoryAdapter.submitList(it.busList)
+                    inventoryAdapter.submitList(it.inventoryList)
                 }
                 is InventoryListEvent.Failure -> {
                     Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()

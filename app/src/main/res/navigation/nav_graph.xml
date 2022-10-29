@@ -22,5 +22,18 @@
         <action
             android:id="@+id/action_inventoryListFragment_to_addInventoryFragment"
             app:destination="@id/addInventoryFragment" />
+        <action
+            android:id="@+id/action_inventoryListFragment_to_detailInventoryFragment"
+            app:destination="@id/detailInventoryFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailInventoryFragment"
+        android:name="com.llc.myinventory.detail_inventory.DetailInventoryFragment"
+        android:label="fragment_detail_inventory"
+        tools:layout="@layout/fragment_detail_inventory" >
+
+        <argument
+            android:name="id"
+            app:argType="integer" />
     </fragment>
 </navigation>
