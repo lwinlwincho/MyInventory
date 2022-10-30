@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.llc.myinventory.database.InventoryItemEntity
 import com.llc.myinventory.databinding.InventoryListFragmentBinding
+import com.llc.myinventory.extension.getFormattedPrice
 
 class InventoryAdapter(
     private val onItemClicked: (InventoryItemEntity) -> Unit
@@ -36,7 +37,8 @@ class InventoryAdapter(
         fun bind(inventoryItemEntity: InventoryItemEntity) {
             binding.apply {
                 itemName.text = inventoryItemEntity.itemName
-                itemPrice.text = inventoryItemEntity.itemPrice.toString()
+               // itemPrice.text = inventoryItemEntity.itemPrice.toString()
+                itemPrice.text = inventoryItemEntity.getFormattedPrice()
                 itemQuantity.text = inventoryItemEntity.quantityInStock.toString()
             }
 

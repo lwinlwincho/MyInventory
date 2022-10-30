@@ -32,16 +32,13 @@ class InventoryListFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding= InventoryListFragmentBinding.inflate(inflater,container,false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        recyclerView = binding.recyclerView
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         val inventoryAdapter = InventoryAdapter {
             val action =
@@ -51,7 +48,10 @@ class InventoryListFragment : Fragment() {
             view.findNavController().navigate(action)
         }
 
+        recyclerView = binding.recyclerView
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter=inventoryAdapter
+
         viewModel.getAllInventory(appDatabase)
         viewModel.inventoryListEvent.observe(viewLifecycleOwner) {
             when (it) {

@@ -9,12 +9,11 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.llc.myinventory.InventoryAdapter
+import com.llc.myinventory.database.InventoryItemEntity
 import com.llc.myinventory.database.InventoryItemRoomDatabase
 import com.llc.myinventory.databinding.FragmentDetailInventoryBinding
-import com.llc.myinventory.inventorylist.InventoryListEvent
+import com.llc.myinventory.extension.getFormattedPrice
 import com.llc.myinventory.inventorylist.InventoryListFragmentDirections
 
 class DetailInventoryFragment : Fragment() {
@@ -54,15 +53,23 @@ class DetailInventoryFragment : Fragment() {
         viewModel.getDetail(appDatabase,args.id)
         viewModel.inventoryDetailEvent.observe(viewLifecycleOwner){
             when (it) {
-                is InventoryListEvent.Loading -> {}
-                is InventoryListEvent.Success -> {
+                is DetailInventoryEvent.Loading -> {}
+                is DetailInventoryEvent.Success -> {
+                    bind(it.detailInventory)
                    // busStopAdapter.submitList(it.busList)
                 }
-                is InventoryListEvent.Failure -> {
-                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
+                is DetailInventoryEvent.Error -> {
+                    Toast.makeText(requireContext(), it.error, Toast.LENGTH_LONG).show()
                 }
             }
         }
     }
 
+    private fun bind(item: InventoryItemEntity) {
+        binding.apply {
+            itemName.text = item.itemName
+            itemPrice.text = item.getFormattedPrice()
+            itemCount.text = item.quantityInStock.toString()
+        }
+    }
 }

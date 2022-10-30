@@ -12,21 +12,28 @@ import java.lang.Exception
 
 class DetailInventoryViewModel:ViewModel() {
 
-    private var _inventoryDetailEvent = MutableLiveData<InventoryListEvent>()
-    val inventoryDetailEvent: LiveData<InventoryListEvent> = _inventoryDetailEvent
-
+    private var _inventoryDetailEvent = MutableLiveData<DetailInventoryEvent>()
+    val inventoryDetailEvent: LiveData<DetailInventoryEvent> = _inventoryDetailEvent
 
     fun getDetail(appDatabase: InventoryItemRoomDatabase, id:Int){
-        _inventoryDetailEvent.value = InventoryListEvent.Loading
+
+        _inventoryDetailEvent.value = DetailInventoryEvent.Loading
 
         viewModelScope.launch {
             try {
                 //get data from offline database
-                val result: List<InventoryItemEntity> = appDatabase.inventoryItemDao().getById(id)
-                _inventoryDetailEvent.value = InventoryListEvent.Success(result)
+                val result = appDatabase.inventoryItemDao().getById(id)
+                _inventoryDetailEvent.value = DetailInventoryEvent.Success(result)
             } catch (e: Exception) {
-                _inventoryDetailEvent.value = InventoryListEvent.Failure(e.message.toString())
+                _inventoryDetailEvent.value = DetailInventoryEvent.Error(e.message.toString())
             }
         }
     }
+}
+
+sealed class DetailInventoryEvent {
+    object Loading : DetailInventoryEvent()
+    data class Success(val detailInventory: InventoryItemEntity) : DetailInventoryEvent()
+    data class Error(val error: String) : DetailInventoryEvent()
+
 }
