@@ -50,5 +50,8 @@
         <argument
             android:name="id"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_updateInventoryFragment_to_inventoryListFragment"
+            app:destination="@id/inventoryListFragment" />
     </fragment>
 </navigation>

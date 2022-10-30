@@ -36,10 +36,13 @@ class DetailInventoryViewModel : ViewModel() {
         return (item.quantityInStock > 0)
     }
 
-    private fun editQuantityItem(appDatabase: InventoryItemRoomDatabase, item: InventoryItemEntity) {
+    private fun editQuantityItem(
+        appDatabase: InventoryItemRoomDatabase,
+        item: InventoryItemEntity
+    ) {
         try {
             viewModelScope.launch {
-                appDatabase.inventoryItemDao().update(item)
+                 appDatabase.inventoryItemDao().update(item)
             }
         } catch (e: Exception) {
             _inventoryDetailEvent.value = DetailInventoryEvent.Error(e.message.toString())

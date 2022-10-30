@@ -26,7 +26,6 @@ class AddInventoryViewModel:ViewModel() {
         itemPrice: String,
         quantityInStock:String
     ) {
-
         viewModelScope.launch {
             try {
                 val entity = InventoryItemEntity(

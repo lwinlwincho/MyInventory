@@ -10,16 +10,10 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.llc.myinventory.R
 import com.llc.myinventory.add_inventory.AddInventoryFragmentDirections
-import com.llc.myinventory.add_inventory.AddInventoryViewModel
-import com.llc.myinventory.add_inventory.InputInentoryEvent
 import com.llc.myinventory.database.InventoryItemEntity
 import com.llc.myinventory.database.InventoryItemRoomDatabase
-import com.llc.myinventory.databinding.FragmentAddInventoryBinding
 import com.llc.myinventory.databinding.FragmentUpdateInventoryBinding
-import com.llc.myinventory.detail_inventory.DetailInventoryEvent
-import com.llc.myinventory.extension.getFormattedPrice
 
 class UpdateInventoryFragment : Fragment() {
     private var _binding: FragmentUpdateInventoryBinding? = null
@@ -59,30 +53,45 @@ class UpdateInventoryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val id = args.id
         val appDatabase = InventoryItemRoomDatabase.getDatabase(requireContext())
 
-        viewModel.updateItem(appDatabase,args.id)
+        viewModel.showItem(appDatabase, args.id)
 
-        /*binding.saveAction.setOnClickListener {
+        viewModel.showUiEvent.observe(viewLifecycleOwner) {
+            when (it) {
+                is UpdateInventoryEvent.Loading -> {}
+                is UpdateInventoryEvent.SuccessShow -> {
+                    bind(it.updateInventoryEvent)
+                    // Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
+                    // busStopAdapter.submitList(it.busList)
+                }
+                is UpdateInventoryEvent.Error -> {
+                    Toast.makeText(requireContext(), it.error, Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+
+        binding.saveAction.setOnClickListener {
             if (isEntryValid()) {
                 viewModel.updateItem(
+                    id=id,
                     appDatabase = appDatabase,
                     itemName = binding.edtItemName.text.toString(),
                     itemPrice = binding.edtItemPrice.text.toString(),
-                    quantityInStock = binding.edtItemQuantity.text.toString()
+                    itemQuantity = binding.edtItemQuantity.text.toString()
                 )
-                val action = AddInventoryFragmentDirections.actionAddInventoryFragmentToInventoryListFragment()
+                val action =
+                    UpdateInventoryFragmentDirections.actionUpdateInventoryFragmentToInventoryListFragment()
                 findNavController().navigate(action)
             }
         }
-*/
+
         viewModel.updateUiEvent.observe(viewLifecycleOwner) {
             when (it) {
                 is UpdateInventoryEvent.Loading -> {}
-                is UpdateInventoryEvent.Success -> {
-                    bind(it.updateInventoryEvent)
-                   // Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
-                    // busStopAdapter.submitList(it.busList)
+                is UpdateInventoryEvent.SuccessUpdate -> {
+                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
                 }
                 is UpdateInventoryEvent.Error -> {
                     Toast.makeText(requireContext(), it.error, Toast.LENGTH_LONG).show()

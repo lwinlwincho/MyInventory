@@ -7,10 +7,12 @@ import androidx.lifecycle.viewModelScope
 import com.llc.myinventory.add_inventory.InputInentoryEvent
 import com.llc.myinventory.database.InventoryItemEntity
 import com.llc.myinventory.database.InventoryItemRoomDatabase
-import com.llc.myinventory.detail_inventory.DetailInventoryEvent
 import kotlinx.coroutines.launch
 
 class UpdateInventoryViewModel : ViewModel() {
+
+    private var _showUiEvent = MutableLiveData<UpdateInventoryEvent>()
+    val showUiEvent: LiveData<UpdateInventoryEvent> = _showUiEvent
 
     private var _updateUiEvent = MutableLiveData<UpdateInventoryEvent>()
     val updateUiEvent: LiveData<UpdateInventoryEvent> = _updateUiEvent
@@ -22,46 +24,50 @@ class UpdateInventoryViewModel : ViewModel() {
         return true
     }
 
-    fun updateItem(appDatabase: InventoryItemRoomDatabase, id: Int) {
+    fun showItem(appDatabase: InventoryItemRoomDatabase, id: Int) {
 
-        _updateUiEvent.value = UpdateInventoryEvent.Loading
+        _showUiEvent.value = UpdateInventoryEvent.Loading
 
         viewModelScope.launch {
             try {
                 //get data from offline database
                 val result = appDatabase.inventoryItemDao().getById(id)
-                _updateUiEvent.value = UpdateInventoryEvent.Success(result)
+                _showUiEvent.value = UpdateInventoryEvent.SuccessShow(result)
             } catch (e: Exception) {
-                _updateUiEvent.value = UpdateInventoryEvent.Error(e.message.toString())
+                _showUiEvent.value = UpdateInventoryEvent.Error(e.message.toString())
             }
         }
     }
 
-    /*fun updateItem(
+    fun updateItem(
+        id:Int,
         appDatabase: InventoryItemRoomDatabase,
         itemName: String,
         itemPrice: String,
-        quantityInStock: String
+        itemQuantity: String
     ) {
+        _updateUiEvent.value = UpdateInventoryEvent.Loading
+
         viewModelScope.launch {
             try {
                 val entity = InventoryItemEntity(
                     itemName = itemName,
                     itemPrice = itemPrice.toDouble(),
-                    quantityInStock = quantityInStock.toInt()
+                    quantityInStock = itemQuantity.toInt()
                 )
                 appDatabase.inventoryItemDao().update(entity)
-                _updateUiEvent.postValue(UpdateInventoryEvent.Success("Successfully Updated!"))
+                _updateUiEvent.postValue(UpdateInventoryEvent.SuccessUpdate("Successfully Added!"))
             } catch (e: Exception) {
                 _updateUiEvent.postValue(UpdateInventoryEvent.Error(e.message.toString()))
             }
         }
-    }*/
+    }
 }
 
 sealed class UpdateInventoryEvent {
     object Loading : UpdateInventoryEvent()
-    data class Success(val updateInventoryEvent: InventoryItemEntity) : UpdateInventoryEvent()
+    data class SuccessShow(val updateInventoryEvent: InventoryItemEntity) : UpdateInventoryEvent()
+    data class SuccessUpdate(val message:String) : UpdateInventoryEvent()
     data class Error(val error: String) : UpdateInventoryEvent()
 
 }
