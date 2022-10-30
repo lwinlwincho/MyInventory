@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.llc.myinventory.database.InventoryItemEntity
 import com.llc.myinventory.databinding.InventoryListFragmentBinding
+import com.llc.myinventory.databinding.ItemListItemBinding
 import com.llc.myinventory.extension.getFormattedPrice
 
 class InventoryAdapter(
@@ -15,7 +16,7 @@ class InventoryAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InventoryViewHolder {
         return InventoryViewHolder(
-            InventoryListFragmentBinding.inflate(
+            ItemListItemBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -32,7 +33,7 @@ class InventoryAdapter(
     }
 
     class InventoryViewHolder(
-        private var binding: InventoryListFragmentBinding
+        private var binding: ItemListItemBinding
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(inventoryItemEntity: InventoryItemEntity) {
             binding.apply {
@@ -41,7 +42,6 @@ class InventoryAdapter(
                 itemPrice.text = inventoryItemEntity.getFormattedPrice()
                 itemQuantity.text = inventoryItemEntity.quantityInStock.toString()
             }
-
         }
     }
 

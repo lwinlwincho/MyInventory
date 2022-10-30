@@ -47,6 +47,7 @@ class UpdateInventoryFragment : Fragment() {
             edtItemName.setText(item.itemName, TextView.BufferType.SPANNABLE)
             edtItemPrice.setText(price, TextView.BufferType.SPANNABLE)
             edtItemQuantity.setText(item.quantityInStock.toString(), TextView.BufferType.SPANNABLE)
+
         }
     }
 

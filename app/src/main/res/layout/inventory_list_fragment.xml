@@ -55,7 +55,7 @@
         android:layout_height="wrap_content"
         android:scrollbars="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@id/item_name"
         app:layout_constraintTop_toBottomOf="@+id/divider"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
