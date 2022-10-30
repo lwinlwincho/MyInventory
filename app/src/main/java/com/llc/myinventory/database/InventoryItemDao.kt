@@ -9,7 +9,7 @@ interface InventoryItemDao {
     fun insert(item: InventoryItemEntity)
 
     @Update
-    fun update(item: InventoryItemEntity)
+    suspend fun update(item: InventoryItemEntity)
 
     @Delete
     fun delete(item: InventoryItemEntity)

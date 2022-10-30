@@ -20,8 +20,6 @@ class InventoryListFragment : Fragment() {
     private var _binding: InventoryListFragmentBinding? = null
     val binding get() = _binding!!
 
-    private lateinit var recyclerView: RecyclerView
-
     private val viewModel: InventoryListViewModel by viewModels()
 
     // create database
@@ -33,7 +31,7 @@ class InventoryListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding= InventoryListFragmentBinding.inflate(inflater,container,false)
+        _binding = InventoryListFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -48,9 +46,11 @@ class InventoryListFragment : Fragment() {
             view.findNavController().navigate(action)
         }
 
-        recyclerView = binding.recyclerView
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        recyclerView.adapter=inventoryAdapter
+        binding.recyclerView.apply {
+            layoutManager =
+                LinearLayoutManager(requireContext())
+            adapter = inventoryAdapter
+        }
 
         viewModel.getAllInventory(appDatabase)
         viewModel.inventoryListEvent.observe(viewLifecycleOwner) {
@@ -70,5 +70,10 @@ class InventoryListFragment : Fragment() {
                 InventoryListFragmentDirections.actionInventoryListFragmentToAddInventoryFragment()
             findNavController().navigate(action)
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

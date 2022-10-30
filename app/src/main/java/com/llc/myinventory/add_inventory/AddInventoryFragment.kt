@@ -22,7 +22,7 @@ class AddInventoryFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentAddInventoryBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -51,8 +51,6 @@ class AddInventoryFragment : Fragment() {
                 )
                 val action = AddInventoryFragmentDirections.actionAddInventoryFragmentToInventoryListFragment()
                 findNavController().navigate(action)
-
-
             }
         }
 

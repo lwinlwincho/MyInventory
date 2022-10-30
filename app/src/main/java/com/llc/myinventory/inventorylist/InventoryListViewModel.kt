@@ -10,6 +10,7 @@ import kotlinx.coroutines.launch
 import java.lang.Exception
 
 class InventoryListViewModel : ViewModel() {
+
     private var _inventoryListEvent = MutableLiveData<InventoryListEvent>()
     val inventoryListEvent: LiveData<InventoryListEvent> = _inventoryListEvent
 

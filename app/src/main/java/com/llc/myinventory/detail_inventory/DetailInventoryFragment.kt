@@ -40,23 +40,13 @@ class DetailInventoryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = InventoryAdapter {
-            val action = InventoryListFragmentDirections.actionInventoryListFragmentToDetailInventoryFragment(it.id)
-            findNavController().navigate(action)
-        }
-
-       /* recyclerView = binding.recyclerView
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        //val busStopAdapter = BusStopAdapter {}
-        recyclerView.adapter = busStopAdapter*/
-
-        viewModel.getDetail(appDatabase,args.id)
-        viewModel.inventoryDetailEvent.observe(viewLifecycleOwner){
+        viewModel.getDetail(appDatabase, args.id)
+        viewModel.inventoryDetailEvent.observe(viewLifecycleOwner) {
             when (it) {
                 is DetailInventoryEvent.Loading -> {}
                 is DetailInventoryEvent.Success -> {
                     bind(it.detailInventory)
-                   // busStopAdapter.submitList(it.busList)
+                    // busStopAdapter.submitList(it.busList)
                 }
                 is DetailInventoryEvent.Error -> {
                     Toast.makeText(requireContext(), it.error, Toast.LENGTH_LONG).show()
@@ -70,6 +60,13 @@ class DetailInventoryFragment : Fragment() {
             itemName.text = item.itemName
             itemPrice.text = item.getFormattedPrice()
             itemCount.text = item.quantityInStock.toString()
+            sellItem.isEnabled = viewModel.isStockAvailable(item)
+            sellItem.setOnClickListener { viewModel.sellItem(appDatabase,item) }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
