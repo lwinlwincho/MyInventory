@@ -9,7 +9,9 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.llc.myinventory.InventoryAdapter
+import com.llc.myinventory.R
 import com.llc.myinventory.database.InventoryItemEntity
 import com.llc.myinventory.database.InventoryItemRoomDatabase
 import com.llc.myinventory.databinding.FragmentDetailInventoryBinding
@@ -23,7 +25,9 @@ class DetailInventoryFragment : Fragment() {
 
     private val viewModel: DetailInventoryViewModel by viewModels()
 
-    private val args: DetailInventoryFragmentArgs by navArgs()
+     private val args: DetailInventoryFragmentArgs by navArgs()
+
+    //lateinit var item:InventoryItemEntity
 
     private val appDatabase by lazy {
         InventoryItemRoomDatabase.getDatabase(requireContext())
@@ -61,8 +65,35 @@ class DetailInventoryFragment : Fragment() {
             itemPrice.text = item.getFormattedPrice()
             itemCount.text = item.quantityInStock.toString()
             sellItem.isEnabled = viewModel.isStockAvailable(item)
-            sellItem.setOnClickListener { viewModel.sellItem(appDatabase,item) }
+            sellItem.setOnClickListener { viewModel.sellItem(appDatabase, item) }
+            deleteItem.setOnClickListener { showConfirmationDialog(item) }
+            editItem.setOnClickListener { editItem(item) }
         }
+    }
+
+    private fun editItem(item: InventoryItemEntity) {
+        val action =
+            DetailInventoryFragmentDirections.actionDetailInventoryFragmentToUpdateInventoryFragment(
+                item.id
+            )
+        this.findNavController().navigate(action)
+    }
+
+    private fun showConfirmationDialog(item: InventoryItemEntity) {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(getString(android.R.string.dialog_alert_title))
+            .setMessage(getString(R.string.delete_question))
+            .setCancelable(false)
+            .setNegativeButton(getString(R.string.no)) { _, _ -> }
+            .setPositiveButton(getString(R.string.yes)) { _, _ ->
+                deleteItem(item)
+            }
+            .show()
+    }
+
+    private fun deleteItem(item: InventoryItemEntity) {
+        viewModel.deleteItem(appDatabase, item)
+        findNavController().navigateUp()
     }
 
     override fun onDestroyView() {

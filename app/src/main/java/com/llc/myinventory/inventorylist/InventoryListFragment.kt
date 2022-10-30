@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.llc.myinventory.InventoryAdapter
+import com.llc.myinventory.R
 import com.llc.myinventory.database.InventoryItemRoomDatabase
 import com.llc.myinventory.databinding.InventoryListFragmentBinding
 
@@ -67,7 +68,9 @@ class InventoryListFragment : Fragment() {
 
         binding.floatingActionButton.setOnClickListener {
             val action =
-                InventoryListFragmentDirections.actionInventoryListFragmentToAddInventoryFragment()
+                InventoryListFragmentDirections.actionInventoryListFragmentToAddInventoryFragment(
+                )
+
             findNavController().navigate(action)
         }
     }

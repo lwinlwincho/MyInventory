@@ -12,7 +12,7 @@ interface InventoryItemDao {
     suspend fun update(item: InventoryItemEntity)
 
     @Delete
-    fun delete(item: InventoryItemEntity)
+    suspend fun delete(item: InventoryItemEntity)
 
     @Query("SELECT * from inventoryitementity WHERE id = :id ORDER BY name ASC")
     fun getById(id:Int): InventoryItemEntity

@@ -31,6 +31,18 @@
         android:name="com.llc.myinventory.detail_inventory.DetailInventoryFragment"
         android:label="fragment_detail_inventory"
         tools:layout="@layout/fragment_detail_inventory" >
+
+        <action
+            android:id="@+id/action_detailInventoryFragment_to_updateInventoryFragment"
+            app:destination="@id/updateInventoryFragment" />
+        <argument
+            android:name="id"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/updateInventoryFragment"
+        android:name="com.llc.myinventory.update.UpdateInventoryFragment"
+        android:label="UpdateInventoryFragment" >
         <argument
             android:name="id"
             app:argType="integer" />

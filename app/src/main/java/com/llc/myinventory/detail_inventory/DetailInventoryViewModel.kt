@@ -12,12 +12,12 @@ import com.llc.myinventory.inventorylist.InventoryListEvent
 import kotlinx.coroutines.launch
 import kotlin.Exception
 
-class DetailInventoryViewModel:ViewModel() {
+class DetailInventoryViewModel : ViewModel() {
 
     private var _inventoryDetailEvent = MutableLiveData<DetailInventoryEvent>()
     val inventoryDetailEvent: LiveData<DetailInventoryEvent> = _inventoryDetailEvent
 
-    fun getDetail(appDatabase: InventoryItemRoomDatabase, id:Int){
+    fun getDetail(appDatabase: InventoryItemRoomDatabase, id: Int) {
 
         _inventoryDetailEvent.value = DetailInventoryEvent.Loading
 
@@ -36,22 +36,31 @@ class DetailInventoryViewModel:ViewModel() {
         return (item.quantityInStock > 0)
     }
 
-    private fun updateItem(appDatabase: InventoryItemRoomDatabase,item: InventoryItemEntity) {
+    private fun editQuantityItem(appDatabase: InventoryItemRoomDatabase, item: InventoryItemEntity) {
         try {
             viewModelScope.launch {
                 appDatabase.inventoryItemDao().update(item)
-                //inventoryItemDao.update(item)
             }
-        }catch (e:Exception){
+        } catch (e: Exception) {
             _inventoryDetailEvent.value = DetailInventoryEvent.Error(e.message.toString())
         }
     }
 
-    fun sellItem(appDatabase: InventoryItemRoomDatabase,item: InventoryItemEntity) {
+    fun sellItem(appDatabase: InventoryItemRoomDatabase, item: InventoryItemEntity) {
         if (item.quantityInStock > 0) {
             // Decrease the quantity by 1
             val newItem = item.copy(quantityInStock = item.quantityInStock - 1)
-            updateItem(appDatabase,newItem)
+            editQuantityItem(appDatabase, newItem)
+        }
+    }
+
+    fun deleteItem(appDatabase: InventoryItemRoomDatabase, item: InventoryItemEntity) {
+        try {
+            viewModelScope.launch {
+                appDatabase.inventoryItemDao().delete(item)
+            }
+        } catch (e: Exception) {
+            _inventoryDetailEvent.value = DetailInventoryEvent.Error(e.message.toString())
         }
     }
 }
