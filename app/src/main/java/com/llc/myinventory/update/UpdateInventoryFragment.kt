@@ -61,12 +61,27 @@ class UpdateInventoryFragment : Fragment() {
 
         val appDatabase = InventoryItemRoomDatabase.getDatabase(requireContext())
 
-        viewModel.updateItem(appDatabase, args.id)
+        viewModel.updateItem(appDatabase,args.id)
+
+        /*binding.saveAction.setOnClickListener {
+            if (isEntryValid()) {
+                viewModel.updateItem(
+                    appDatabase = appDatabase,
+                    itemName = binding.edtItemName.text.toString(),
+                    itemPrice = binding.edtItemPrice.text.toString(),
+                    quantityInStock = binding.edtItemQuantity.text.toString()
+                )
+                val action = AddInventoryFragmentDirections.actionAddInventoryFragmentToInventoryListFragment()
+                findNavController().navigate(action)
+            }
+        }
+*/
         viewModel.updateUiEvent.observe(viewLifecycleOwner) {
             when (it) {
                 is UpdateInventoryEvent.Loading -> {}
                 is UpdateInventoryEvent.Success -> {
-                    bind(it.detailInventory)
+                    bind(it.updateInventoryEvent)
+                   // Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
                     // busStopAdapter.submitList(it.busList)
                 }
                 is UpdateInventoryEvent.Error -> {

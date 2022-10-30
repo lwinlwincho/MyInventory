@@ -10,6 +10,10 @@
         android:name="com.llc.myinventory.add_inventory.AddInventoryFragment"
         android:label="fragment_add_inventory"
         tools:layout="@layout/fragment_add_inventory" >
+        <argument
+            android:name="item_id"
+            android:defaultValue="-1"
+            app:argType="integer" />
         <action
             android:id="@+id/action_addInventoryFragment_to_inventoryListFragment"
             app:destination="@id/inventoryListFragment" />

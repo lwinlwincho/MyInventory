@@ -22,8 +22,7 @@ class AddInventoryFragment : Fragment() {
 
     private val viewModel: AddInventoryViewModel by viewModels()
 
-    //private val args: AddInventoryFragmentArgs by navArgs()
-
+    private val args: AddInventoryFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,32 +41,49 @@ class AddInventoryFragment : Fragment() {
         )
     }
 
+    /* private fun addNewItem() {
+         if (isEntryValid()) {
+             viewModel.addInventory(
+                 appDatabase = appDatabase,
+                 itemName = binding.edtItemName.text.toString(),
+                 itemPrice = binding.edtItemPrice.text.toString(),
+                 quantityInStock = binding.edtItemQuantity.text.toString()
+             )
+             val action = AddInventoryFragmentDirections.actionAddInventoryFragmentToInventoryListFragment()
+             findNavController().navigate(action)
+         }
+     }*/
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val id = args.itemId
         val appDatabase = InventoryItemRoomDatabase.getDatabase(requireContext())
 
-        binding.saveAction.setOnClickListener {
-            if (isEntryValid()) {
-                viewModel.addInventory(
-                    appDatabase = appDatabase,
-                    itemName = binding.edtItemName.text.toString(),
-                    itemPrice = binding.edtItemPrice.text.toString(),
-                    quantityInStock = binding.edtItemQuantity.text.toString()
-                )
-                val action = AddInventoryFragmentDirections.actionAddInventoryFragmentToInventoryListFragment()
-                findNavController().navigate(action)
-            }
-        }
-
-        viewModel.inputUiEvent.observe(viewLifecycleOwner) {
-            when (it) {
-                is InputInentoryEvent.Success -> {
-                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
-                    // findNavController().navigateUp()
+        if (id > 0) {
+            viewModel.inputUiEvent.observe(viewLifecycleOwner) {
+                when (it) {
+                    is InputInentoryEvent.Success -> {
+                        Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
+                        // findNavController().navigateUp()
+                    }
+                    is InputInentoryEvent.Failure -> {
+                        Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
+                    }
                 }
-                is InputInentoryEvent.Failure -> {
-                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
+            }
+        } else {
+            binding.saveAction.setOnClickListener {
+                if (isEntryValid()) {
+                    viewModel.addInventory(
+                        appDatabase = appDatabase,
+                        itemName = binding.edtItemName.text.toString(),
+                        itemPrice = binding.edtItemPrice.text.toString(),
+                        quantityInStock = binding.edtItemQuantity.text.toString()
+                    )
+                    val action =
+                        AddInventoryFragmentDirections.actionAddInventoryFragmentToInventoryListFragment()
+                    findNavController().navigate(action)
                 }
             }
         }

@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.llc.myinventory.add_inventory.InputInentoryEvent
 import com.llc.myinventory.database.InventoryItemEntity
 import com.llc.myinventory.database.InventoryItemRoomDatabase
 import com.llc.myinventory.detail_inventory.DetailInventoryEvent
@@ -35,11 +36,32 @@ class UpdateInventoryViewModel : ViewModel() {
             }
         }
     }
+
+    /*fun updateItem(
+        appDatabase: InventoryItemRoomDatabase,
+        itemName: String,
+        itemPrice: String,
+        quantityInStock: String
+    ) {
+        viewModelScope.launch {
+            try {
+                val entity = InventoryItemEntity(
+                    itemName = itemName,
+                    itemPrice = itemPrice.toDouble(),
+                    quantityInStock = quantityInStock.toInt()
+                )
+                appDatabase.inventoryItemDao().update(entity)
+                _updateUiEvent.postValue(UpdateInventoryEvent.Success("Successfully Updated!"))
+            } catch (e: Exception) {
+                _updateUiEvent.postValue(UpdateInventoryEvent.Error(e.message.toString()))
+            }
+        }
+    }*/
 }
 
 sealed class UpdateInventoryEvent {
     object Loading : UpdateInventoryEvent()
-    data class Success(val detailInventory: InventoryItemEntity) : UpdateInventoryEvent()
+    data class Success(val updateInventoryEvent: InventoryItemEntity) : UpdateInventoryEvent()
     data class Error(val error: String) : UpdateInventoryEvent()
 
 }
