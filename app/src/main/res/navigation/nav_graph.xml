@@ -22,7 +22,7 @@
         android:id="@+id/inventoryListFragment"
         android:name="com.llc.myinventory.inventorylist.InventoryListFragment"
         android:label="InventoryListFragment"
-        tools:layout="@layout/item_list_item">
+        tools:layout="@layout/item_inventory">
         <action
             android:id="@+id/action_inventoryListFragment_to_addInventoryFragment"
             app:destination="@id/addInventoryFragment" />

@@ -20,8 +20,7 @@ class InventoryListViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 //get data from offline database
-                val result: List<InventoryItemEntity> =
-                    appDatabase.inventoryItemDao().getAllInventory()
+                val result: List<InventoryItemEntity> = appDatabase.inventoryItemDao().getAllInventory()
                 _inventoryListEvent.value = InventoryListEvent.Success(result)
             } catch (e: Exception) {
                 _inventoryListEvent.value = InventoryListEvent.Failure(e.message.toString())

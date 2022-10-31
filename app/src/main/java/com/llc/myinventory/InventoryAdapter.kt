@@ -6,34 +6,32 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.llc.myinventory.database.InventoryItemEntity
-import com.llc.myinventory.databinding.InventoryListFragmentBinding
-import com.llc.myinventory.databinding.ItemListItemBinding
+import com.llc.myinventory.databinding.ItemInventoryBinding
 import com.llc.myinventory.extension.getFormattedPrice
 
 class InventoryAdapter(
     private val onItemClicked: (InventoryItemEntity) -> Unit
-) : ListAdapter<InventoryItemEntity, InventoryAdapter.InventoryViewHolder>(DiffCallback) {
+) : ListAdapter<InventoryItemEntity, InventoryAdapter.InventoryViewHolder>(diffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InventoryViewHolder {
         return InventoryViewHolder(
-            ItemListItemBinding.inflate(
+            ItemInventoryBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
-            )
+            ),
+            onItemClicked
         )
     }
 
     override fun onBindViewHolder(holder: InventoryViewHolder, position: Int) {
-        val currentPosition = getItem(position)
-        holder.itemView.setOnClickListener {
-            onItemClicked(currentPosition)
-        }
-        holder.bind(currentPosition)
+        val item = getItem(position)
+        holder.bind(item)
     }
 
     class InventoryViewHolder(
-        private var binding: ItemListItemBinding
+        private var binding: ItemInventoryBinding,
+        private val onItemClicked : (InventoryItemEntity) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(inventoryItemEntity: InventoryItemEntity) {
             binding.apply {
@@ -41,12 +39,15 @@ class InventoryAdapter(
                // itemPrice.text = inventoryItemEntity.itemPrice.toString()
                 itemPrice.text = inventoryItemEntity.getFormattedPrice()
                 itemQuantity.text = inventoryItemEntity.quantityInStock.toString()
+                root.setOnClickListener {
+                    onItemClicked(inventoryItemEntity)
+                }
             }
         }
     }
 
     companion object {
-        private val DiffCallback = object : DiffUtil.ItemCallback<InventoryItemEntity>() {
+        private val diffCallback = object : DiffUtil.ItemCallback<InventoryItemEntity>() {
             override fun areItemsTheSame(
                 oldItem: InventoryItemEntity,
                 newItem: InventoryItemEntity

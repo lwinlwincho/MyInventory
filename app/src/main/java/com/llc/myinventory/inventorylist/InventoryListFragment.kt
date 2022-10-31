@@ -7,25 +7,30 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.llc.myinventory.InventoryAdapter
-import com.llc.myinventory.R
 import com.llc.myinventory.database.InventoryItemRoomDatabase
 import com.llc.myinventory.databinding.InventoryListFragmentBinding
 
 class InventoryListFragment : Fragment() {
 
     private var _binding: InventoryListFragmentBinding? = null
-    val binding get() = _binding!!
+    private val binding get() = _binding!!
 
     private val viewModel: InventoryListViewModel by viewModels()
 
     // create database
     private val appDatabase by lazy {
         InventoryItemRoomDatabase.getDatabase(requireContext())
+    }
+
+    private val inventoryAdapter by lazy {
+        InventoryAdapter {
+            val action = InventoryListFragmentDirections
+                .actionInventoryListFragmentToDetailInventoryFragment(id = it.id)
+            findNavController().navigate(action)
+        }
     }
 
     override fun onCreateView(
@@ -39,17 +44,8 @@ class InventoryListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val inventoryAdapter = InventoryAdapter {
-            val action =
-                InventoryListFragmentDirections.actionInventoryListFragmentToDetailInventoryFragment(
-                    id = it.id
-                )
-            view.findNavController().navigate(action)
-        }
-
         binding.recyclerView.apply {
-            layoutManager =
-                LinearLayoutManager(requireContext())
+            layoutManager = LinearLayoutManager(requireContext())
             adapter = inventoryAdapter
         }
 
@@ -67,8 +63,8 @@ class InventoryListFragment : Fragment() {
         }
 
         binding.floatingActionButton.setOnClickListener {
-            val action =
-                InventoryListFragmentDirections.actionInventoryListFragmentToAddInventoryFragment()
+            val action = InventoryListFragmentDirections
+                .actionInventoryListFragmentToAddInventoryFragment()
             findNavController().navigate(action)
         }
     }
