@@ -62,7 +62,7 @@ class DetailInventoryFragment : Fragment() {
             itemPrice.text = item.getFormattedPrice()
             itemCount.text = item.quantityInStock.toString()
             sellItem.isEnabled = viewModel.isStockAvailable(item)
-            sellItem.setOnClickListener { viewModel.sellItem(appDatabase, item) }
+            sellItem.setOnClickListener { viewModel.sellItem(appDatabase,item) }
             editItem.setOnClickListener { editItem(item) }
             deleteItem.setOnClickListener { showConfirmationDialog(item) }
         }

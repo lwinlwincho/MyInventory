@@ -46,7 +46,8 @@ class UpdateInventoryViewModel : ViewModel() {
 
         viewModelScope.launch {
             try {
-                appDatabase.inventoryItemDao().update(id,itemName,itemPrice.toDouble(), quantityInStock.toInt())
+                appDatabase.inventoryItemDao()
+                    .update(id, itemName, itemPrice.toDouble(), quantityInStock.toInt())
                 _updateUiEvent.postValue(UpdateInventoryEvent.SuccessUpdate("Success Updated"))
             } catch (e: Exception) {
                 _updateUiEvent.postValue(UpdateInventoryEvent.Error(e.message.toString()))
