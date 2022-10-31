@@ -25,9 +25,7 @@ class DetailInventoryFragment : Fragment() {
 
     private val viewModel: DetailInventoryViewModel by viewModels()
 
-     private val args: DetailInventoryFragmentArgs by navArgs()
-
-    //lateinit var item:InventoryItemEntity
+    private val args: DetailInventoryFragmentArgs by navArgs()
 
     private val appDatabase by lazy {
         InventoryItemRoomDatabase.getDatabase(requireContext())
@@ -50,7 +48,6 @@ class DetailInventoryFragment : Fragment() {
                 is DetailInventoryEvent.Loading -> {}
                 is DetailInventoryEvent.Success -> {
                     bind(it.detailInventory)
-                    // busStopAdapter.submitList(it.busList)
                 }
                 is DetailInventoryEvent.Error -> {
                     Toast.makeText(requireContext(), it.error, Toast.LENGTH_LONG).show()
@@ -66,8 +63,8 @@ class DetailInventoryFragment : Fragment() {
             itemCount.text = item.quantityInStock.toString()
             sellItem.isEnabled = viewModel.isStockAvailable(item)
             sellItem.setOnClickListener { viewModel.sellItem(appDatabase, item) }
-            deleteItem.setOnClickListener { showConfirmationDialog(item) }
             editItem.setOnClickListener { editItem(item) }
+            deleteItem.setOnClickListener { showConfirmationDialog(item) }
         }
     }
 

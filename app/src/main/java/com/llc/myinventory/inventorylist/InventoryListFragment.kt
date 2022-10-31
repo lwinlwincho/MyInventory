@@ -68,9 +68,7 @@ class InventoryListFragment : Fragment() {
 
         binding.floatingActionButton.setOnClickListener {
             val action =
-                InventoryListFragmentDirections.actionInventoryListFragmentToAddInventoryFragment(
-                )
-
+                InventoryListFragmentDirections.actionInventoryListFragmentToAddInventoryFragment()
             findNavController().navigate(action)
         }
     }
