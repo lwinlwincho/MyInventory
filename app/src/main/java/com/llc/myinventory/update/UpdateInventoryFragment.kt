@@ -49,15 +49,18 @@ class UpdateInventoryFragment : Fragment() {
             edtItemName.setText(item.itemName, TextView.BufferType.SPANNABLE)
             edtItemPrice.setText(price, TextView.BufferType.SPANNABLE)
             edtItemQuantity.setText(item.quantityInStock.toString(), TextView.BufferType.SPANNABLE)
-            saveAction.setOnClickListener { update(item) }
+            saveAction.setOnClickListener { update() }
         }
     }
 
-    private fun update(item: InventoryItemEntity) {
+    private fun update() {
         if (isEntryValid()) {
             viewModel.updateItem(
                 appDatabase = appDatabase,
-                item = item
+                id=args.id,
+                itemName = binding.edtItemName.text.toString(),
+                itemPrice = binding.edtItemPrice.text.toString(),
+                quantityInStock = binding.edtItemQuantity.text.toString()
             )
             val action =
                 UpdateInventoryFragmentDirections.actionUpdateInventoryFragmentToInventoryListFragment()

@@ -50,7 +50,7 @@ class DetailInventoryViewModel : ViewModel() {
     ) {
         try {
             viewModelScope.launch {
-                appDatabase.inventoryItemDao().update(item)
+                appDatabase.inventoryItemDao().updateQuantity(item)
             }
         } catch (e: Exception) {
             _inventoryDetailEvent.value = DetailInventoryEvent.Error(e.message.toString())

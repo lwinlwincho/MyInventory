@@ -8,8 +8,12 @@ interface InventoryItemDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(item: InventoryItemEntity)
 
+    @Query("Update inventoryitementity Set name=:itemName,price=:itemPrice,quantity=:itemQuantity Where id=:id")
+    suspend fun update(id:Int,itemName:String,itemPrice:Double,itemQuantity:Int)
+
+
     @Update
-    suspend fun update(item: InventoryItemEntity)
+    suspend fun updateQuantity(item: InventoryItemEntity)
 
     @Delete
     suspend fun delete(item: InventoryItemEntity)

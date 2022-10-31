@@ -41,19 +41,6 @@ class AddInventoryFragment : Fragment() {
         )
     }
 
-    /* private fun addNewItem() {
-         if (isEntryValid()) {
-             viewModel.addInventory(
-                 appDatabase = appDatabase,
-                 itemName = binding.edtItemName.text.toString(),
-                 itemPrice = binding.edtItemPrice.text.toString(),
-                 quantityInStock = binding.edtItemQuantity.text.toString()
-             )
-             val action = AddInventoryFragmentDirections.actionAddInventoryFragmentToInventoryListFragment()
-             findNavController().navigate(action)
-         }
-     }*/
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
