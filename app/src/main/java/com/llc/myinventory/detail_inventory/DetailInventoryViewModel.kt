@@ -33,25 +33,16 @@ class DetailInventoryViewModel : ViewModel() {
         return (item.quantityInStock > 0)
     }
 
-    fun sellItem(appDatabase: InventoryItemRoomDatabase,item:InventoryItemEntity) {
-        if (item.quantityInStock > 0) {
-            // Decrease the quantity by 1
-            val newQuantity = item.copy(quantityInStock = item.quantityInStock - 1)
-            editQuantityItem(appDatabase,item.id,newQuantity)
-        }
-    }
-
-    private fun editQuantityItem(
-        appDatabase: InventoryItemRoomDatabase,
-        id:Int,
-        item:InventoryItemEntity
-    ) {
-        try {
-            viewModelScope.launch {
-                appDatabase.inventoryItemDao().updateQuantity(id,item.quantityInStock)
+    fun sellItem(appDatabase: InventoryItemRoomDatabase, newItem: InventoryItemEntity) {
+        viewModelScope.launch {
+            if (newItem.quantityInStock > 0) {
+                try {
+                    appDatabase.inventoryItemDao().updateQuantity(newItem.id, newItem.quantityInStock)
+                    _inventoryDetailEvent.value = DetailInventoryEvent.Success(newItem)
+                } catch (e: Exception) {
+                    _inventoryDetailEvent.value = DetailInventoryEvent.Error(e.message.toString())
+                }
             }
-        } catch (e: Exception) {
-            _inventoryDetailEvent.value = DetailInventoryEvent.Error(e.message.toString())
         }
     }
 

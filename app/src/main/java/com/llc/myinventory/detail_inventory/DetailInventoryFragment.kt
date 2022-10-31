@@ -57,22 +57,26 @@ class DetailInventoryFragment : Fragment() {
     }
 
     private fun bind(item: InventoryItemEntity) {
-        binding.apply {
+        with(binding) {
             itemName.text = item.itemName
             itemPrice.text = item.getFormattedPrice()
             itemCount.text = item.quantityInStock.toString()
             sellItem.isEnabled = viewModel.isStockAvailable(item)
-            sellItem.setOnClickListener { viewModel.sellItem(appDatabase,item) }
+            sellItem.setOnClickListener {
+                val newItem = item.copy(quantityInStock = item.quantityInStock - 1)
+                viewModel.sellItem(
+                    appDatabase = appDatabase,
+                    newItem = newItem
+                ) // update database
+            }
             editItem.setOnClickListener { editItem(item) }
             deleteItem.setOnClickListener { showConfirmationDialog(item) }
         }
     }
 
     private fun editItem(item: InventoryItemEntity) {
-        val action =
-            DetailInventoryFragmentDirections.actionDetailInventoryFragmentToUpdateInventoryFragment(
-                item.id
-            )
+        val action = DetailInventoryFragmentDirections
+            .actionDetailInventoryFragmentToUpdateInventoryFragment(item.id)
         this.findNavController().navigate(action)
     }
 

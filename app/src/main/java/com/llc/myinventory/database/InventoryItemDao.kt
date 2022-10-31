@@ -9,10 +9,10 @@ interface InventoryItemDao {
     fun insert(item: InventoryItemEntity)
 
     @Query("Update inventoryitementity Set name=:itemName,price=:itemPrice,quantity=:itemQuantity Where id=:id")
-    suspend fun update(id:Int,itemName:String,itemPrice:Double,itemQuantity:Int)
+    suspend fun update(id: Int, itemName: String, itemPrice: Double, itemQuantity: Int)
 
     @Query("Update inventoryitementity Set quantity=:itemQuantity Where id=:id")
-    suspend fun updateQuantity(id:Int,itemQuantity: Int)
+    suspend fun updateQuantity(id: Int, itemQuantity: Int)
 
     /*@Update
     suspend fun updateQuantity(item: InventoryItemEntity)
@@ -21,7 +21,7 @@ interface InventoryItemDao {
     suspend fun delete(item: InventoryItemEntity)
 
     @Query("SELECT * from inventoryitementity WHERE id = :id ORDER BY name ASC")
-    fun getById(id:Int): InventoryItemEntity
+    fun getById(id: Int): InventoryItemEntity
 
     @Query("SELECT * from inventoryitementity ORDER BY name ASC")
     fun getAllInventory(): List<InventoryItemEntity>
