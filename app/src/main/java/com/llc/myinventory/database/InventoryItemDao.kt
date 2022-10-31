@@ -23,6 +23,6 @@ interface InventoryItemDao {
     @Query("SELECT * from inventoryitementity WHERE id = :id ORDER BY name ASC")
     fun getById(id: Int): InventoryItemEntity
 
-    @Query("SELECT * from inventoryitementity ORDER BY name ASC")
+    @Query("SELECT * from inventoryitementity ORDER BY id ASC")
     fun getAllInventory(): List<InventoryItemEntity>
 }

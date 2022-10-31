@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -16,7 +15,7 @@ import com.llc.myinventory.databinding.FragmentUpdateInventoryBinding
 
 class UpdateInventoryFragment : Fragment() {
     private var _binding: FragmentUpdateInventoryBinding? = null
-    val binding get() = _binding!!
+    private val binding get() = _binding!!
 
     private val viewModel: UpdateInventoryViewModel by viewModels()
 
@@ -46,9 +45,9 @@ class UpdateInventoryFragment : Fragment() {
     private fun bind(item: InventoryItemEntity) {
         val price = "%.2f".format(item.itemPrice)
         binding.apply {
-            edtItemName.setText(item.itemName, TextView.BufferType.SPANNABLE)
-            edtItemPrice.setText(price, TextView.BufferType.SPANNABLE)
-            edtItemQuantity.setText(item.quantityInStock.toString(), TextView.BufferType.SPANNABLE)
+            edtItemName.setText(item.itemName)
+            edtItemPrice.setText(price)
+            edtItemQuantity.setText(item.quantityInStock.toString())
             saveAction.setOnClickListener { update() }
         }
     }
@@ -57,14 +56,11 @@ class UpdateInventoryFragment : Fragment() {
         if (isEntryValid()) {
             viewModel.updateItem(
                 appDatabase = appDatabase,
-                id=args.id,
+                id = args.id,
                 itemName = binding.edtItemName.text.toString(),
                 itemPrice = binding.edtItemPrice.text.toString(),
                 quantityInStock = binding.edtItemQuantity.text.toString()
             )
-            val action =
-                UpdateInventoryFragmentDirections.actionUpdateInventoryFragmentToInventoryListFragment()
-            findNavController().navigate(action)
         }
     }
 
@@ -84,6 +80,7 @@ class UpdateInventoryFragment : Fragment() {
                     Toast.makeText(requireContext(), it.error, Toast.LENGTH_LONG).show()
                 }
                 is UpdateInventoryEvent.SuccessUpdate -> {
+                    findNavController().navigateUp()
                     Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
                 }
             }

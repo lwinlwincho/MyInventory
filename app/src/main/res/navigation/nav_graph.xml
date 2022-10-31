@@ -9,15 +9,7 @@
         android:id="@+id/addInventoryFragment"
         android:name="com.llc.myinventory.add_inventory.AddInventoryFragment"
         android:label="fragment_add_inventory"
-        tools:layout="@layout/fragment_add_inventory" >
-        <argument
-            android:name="item_id"
-            android:defaultValue="-1"
-            app:argType="integer" />
-        <action
-            android:id="@+id/action_addInventoryFragment_to_inventoryListFragment"
-            app:destination="@id/inventoryListFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_add_inventory" />
     <fragment
         android:id="@+id/inventoryListFragment"
         android:name="com.llc.myinventory.inventorylist.InventoryListFragment"
@@ -50,8 +42,5 @@
         <argument
             android:name="id"
             app:argType="integer" />
-        <action
-            android:id="@+id/action_updateInventoryFragment_to_inventoryListFragment"
-            app:destination="@id/inventoryListFragment" />
     </fragment>
 </navigation>

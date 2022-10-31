@@ -10,13 +10,11 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.llc.myinventory.InventoryAdapter
 import com.llc.myinventory.R
 import com.llc.myinventory.database.InventoryItemEntity
 import com.llc.myinventory.database.InventoryItemRoomDatabase
 import com.llc.myinventory.databinding.FragmentDetailInventoryBinding
 import com.llc.myinventory.extension.getFormattedPrice
-import com.llc.myinventory.inventorylist.InventoryListFragmentDirections
 
 class DetailInventoryFragment : Fragment() {
 
@@ -51,6 +49,9 @@ class DetailInventoryFragment : Fragment() {
                 }
                 is DetailInventoryEvent.Error -> {
                     Toast.makeText(requireContext(), it.error, Toast.LENGTH_LONG).show()
+                }
+                is DetailInventoryEvent.Deleted -> {
+                    findNavController().navigateUp()
                 }
             }
         }
@@ -94,7 +95,6 @@ class DetailInventoryFragment : Fragment() {
 
     private fun deleteItem(item: InventoryItemEntity) {
         viewModel.deleteItem(appDatabase, item)
-        findNavController().navigateUp()
     }
 
     override fun onDestroyView() {

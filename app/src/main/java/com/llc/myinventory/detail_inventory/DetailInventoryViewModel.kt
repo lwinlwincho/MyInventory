@@ -37,7 +37,8 @@ class DetailInventoryViewModel : ViewModel() {
         viewModelScope.launch {
             if (newItem.quantityInStock > 0) {
                 try {
-                    appDatabase.inventoryItemDao().updateQuantity(newItem.id, newItem.quantityInStock)
+                    appDatabase.inventoryItemDao()
+                        .updateQuantity(newItem.id, newItem.quantityInStock)
                     _inventoryDetailEvent.value = DetailInventoryEvent.Success(newItem)
                 } catch (e: Exception) {
                     _inventoryDetailEvent.value = DetailInventoryEvent.Error(e.message.toString())
@@ -47,18 +48,19 @@ class DetailInventoryViewModel : ViewModel() {
     }
 
     fun deleteItem(appDatabase: InventoryItemRoomDatabase, item: InventoryItemEntity) {
-        try {
-            viewModelScope.launch {
+        viewModelScope.launch {
+            try {
                 appDatabase.inventoryItemDao().delete(item)
+            } catch (e: Exception) {
+                _inventoryDetailEvent.value = DetailInventoryEvent.Error(e.message.toString())
             }
-        } catch (e: Exception) {
-            _inventoryDetailEvent.value = DetailInventoryEvent.Error(e.message.toString())
         }
     }
 }
 
 sealed class DetailInventoryEvent {
     object Loading : DetailInventoryEvent()
+    object Deleted : DetailInventoryEvent()
     data class Success(val detailInventory: InventoryItemEntity) : DetailInventoryEvent()
     data class Error(val error: String) : DetailInventoryEvent()
 }
