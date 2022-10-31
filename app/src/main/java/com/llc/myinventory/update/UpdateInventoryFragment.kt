@@ -67,8 +67,7 @@ class UpdateInventoryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val id = args.id
-        viewModel.showItem(appDatabase, id)
+        viewModel.showItem(appDatabase, args.id)
 
         viewModel.updateUiEvent.observe(viewLifecycleOwner) {
             when (it) {
