@@ -31,12 +31,12 @@ class InventoryAdapter(
 
     class InventoryViewHolder(
         private var binding: ItemInventoryBinding,
-        private val onItemClicked : (InventoryItemEntity) -> Unit
+        private val onItemClicked: (InventoryItemEntity) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(inventoryItemEntity: InventoryItemEntity) {
-            binding.apply {
+            with(binding) {
                 itemName.text = inventoryItemEntity.itemName
-               // itemPrice.text = inventoryItemEntity.itemPrice.toString()
+                // itemPrice.text = inventoryItemEntity.itemPrice.toString()
                 itemPrice.text = inventoryItemEntity.getFormattedPrice()
                 itemQuantity.text = inventoryItemEntity.quantityInStock.toString()
                 root.setOnClickListener {

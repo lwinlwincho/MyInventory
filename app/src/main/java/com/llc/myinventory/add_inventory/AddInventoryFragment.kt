@@ -14,9 +14,14 @@ import com.llc.myinventory.databinding.FragmentAddInventoryBinding
 class AddInventoryFragment : Fragment() {
 
     private var _binding: FragmentAddInventoryBinding? = null
-    val binding get() = _binding!!
+    private val binding get() = _binding!!
 
     private val viewModel: AddInventoryViewModel by viewModels()
+
+    private val appDatabase by lazy {
+        InventoryItemRoomDatabase.getDatabase(requireContext())
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,15 +43,13 @@ class AddInventoryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val appDatabase = InventoryItemRoomDatabase.getDatabase(requireContext())
-
         viewModel.inputUiEvent.observe(viewLifecycleOwner) {
             when (it) {
-                is InputInentoryEvent.Success -> {
+                is InputInventoryEvent.Success -> {
                     Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
                     findNavController().navigateUp()
                 }
-                is InputInentoryEvent.Failure -> {
+                is InputInventoryEvent.Failure -> {
                     Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
                 }
             }
@@ -63,5 +66,8 @@ class AddInventoryFragment : Fragment() {
             }
         }
 
+        binding.backArrow.setOnClickListener {
+            findNavController().navigateUp()
+        }
     }
 }

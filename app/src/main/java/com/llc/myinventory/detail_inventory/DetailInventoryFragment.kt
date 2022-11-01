@@ -72,6 +72,9 @@ class DetailInventoryFragment : Fragment() {
             }
             editItem.setOnClickListener { editItem(item) }
             deleteItem.setOnClickListener { showConfirmationDialog(item) }
+            backArrow.setOnClickListener {
+                findNavController().navigateUp()
+            }
         }
     }
 

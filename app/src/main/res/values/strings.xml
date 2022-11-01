@@ -8,6 +8,7 @@
     <string name="save_action">Save</string>
     <string name="item_detail_fragment_title">Item Details</string>
     <string name="add_fragment_title">Add Item</string>
+    <string name="update_fragment_title">Update Item</string>
     <string name="edit_fragment_title">Edit Item</string>
     <string name="price">Price</string>
     <string name="quantity_in_stock">Quantity\nIn Stock</string>
@@ -19,6 +20,4 @@
     <string name="currency_symbol">$</string>
     <string name="edit_item">Edit Item</string>
     <string name="add_new_item">Add new item</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

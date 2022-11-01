@@ -10,8 +10,8 @@ import kotlinx.coroutines.launch
 
 class AddInventoryViewModel:ViewModel() {
 
-    private var _inputUiEvent = MutableLiveData<InputInentoryEvent>()
-    val inputUiEvent: LiveData<InputInentoryEvent> = _inputUiEvent
+    private var _inputUiEvent = MutableLiveData<InputInventoryEvent>()
+    val inputUiEvent: LiveData<InputInventoryEvent> = _inputUiEvent
 
     fun isEntryValid(itemName: String, itemPrice: String, itemCount: String): Boolean {
         if (itemName.isBlank() || itemPrice.isBlank() || itemCount.isBlank()) {
@@ -34,15 +34,15 @@ class AddInventoryViewModel:ViewModel() {
                     quantityInStock = quantityInStock.toInt()
                 )
                 appDatabase.inventoryItemDao().insert(entity)
-                _inputUiEvent.postValue(InputInentoryEvent.Success("Successfully Added!"))
+                _inputUiEvent.postValue(InputInventoryEvent.Success("Successfully Added!"))
             } catch (e: Exception) {
-                _inputUiEvent.postValue(InputInentoryEvent.Failure(e.message.toString()))
+                _inputUiEvent.postValue(InputInventoryEvent.Failure(e.message.toString()))
             }
         }
     }
 }
 
-sealed class InputInentoryEvent {
-    data class Success(val message: String) : InputInentoryEvent()
-    data class Failure(val message: String) : InputInentoryEvent()
+sealed class InputInventoryEvent {
+    data class Success(val message: String) : InputInventoryEvent()
+    data class Failure(val message: String) : InputInventoryEvent()
 }

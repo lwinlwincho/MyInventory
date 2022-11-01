@@ -44,7 +44,7 @@ class UpdateInventoryFragment : Fragment() {
 
     private fun bind(item: InventoryItemEntity) {
         val price = "%.2f".format(item.itemPrice)
-        binding.apply {
+        with(binding) {
             edtItemName.setText(item.itemName)
             edtItemPrice.setText(price)
             edtItemQuantity.setText(item.quantityInStock.toString())
@@ -83,6 +83,10 @@ class UpdateInventoryFragment : Fragment() {
                     Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
                 }
             }
+        }
+
+        binding.backArrow.setOnClickListener {
+            findNavController().navigateUp()
         }
     }
 }
