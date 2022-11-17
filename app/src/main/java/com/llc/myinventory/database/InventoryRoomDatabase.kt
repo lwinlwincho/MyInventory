@@ -5,19 +5,19 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = arrayOf(InventoryItemEntity::class), version = 2)
-abstract class InventoryItemRoomDatabase : RoomDatabase() {
+@Database(entities = [InventoryItemEntity::class], version = 2)
+abstract class InventoryRoomDatabase : RoomDatabase() {
     abstract fun inventoryItemDao(): InventoryItemDao
 
-    companion object {
+   /* companion object {
         @Volatile
-        private var INSTANCE: InventoryItemRoomDatabase? = null
+        private var INSTANCE: InventoryRoomDatabase? = null
 
-        fun getDatabase(context: Context): InventoryItemRoomDatabase {
+        fun getDatabase(context: Context): InventoryRoomDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context,
-                    InventoryItemRoomDatabase::class.java,
+                    InventoryRoomDatabase::class.java,
                     "inventory_item_database"
                 )
                     .allowMainThreadQueries()
@@ -27,5 +27,5 @@ abstract class InventoryItemRoomDatabase : RoomDatabase() {
                 return instance
             }
         }
-    }
+    }*/
 }

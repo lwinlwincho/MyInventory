@@ -4,6 +4,7 @@
     package="com.llc.myinventory">
 
     <application
+        android:name=".database.InventoryApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"

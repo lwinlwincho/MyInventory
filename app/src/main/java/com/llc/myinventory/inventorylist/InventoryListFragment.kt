@@ -10,9 +10,11 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.llc.myinventory.InventoryAdapter
-import com.llc.myinventory.database.InventoryItemRoomDatabase
+import com.llc.myinventory.database.InventoryRoomDatabase
 import com.llc.myinventory.databinding.InventoryListFragmentBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class InventoryListFragment : Fragment() {
 
     private var _binding: InventoryListFragmentBinding? = null
@@ -21,10 +23,10 @@ class InventoryListFragment : Fragment() {
     private val viewModel: InventoryListViewModel by viewModels()
 
     // create database
-    private val appDatabase by lazy {
-        InventoryItemRoomDatabase.getDatabase(requireContext())
+  /*  private val appDatabase by lazy {
+        InventoryRoomDatabase.getDatabase(requireContext())
     }
-
+*/
     private val inventoryAdapter by lazy {
         InventoryAdapter {
             val action = InventoryListFragmentDirections
@@ -49,10 +51,9 @@ class InventoryListFragment : Fragment() {
             adapter = inventoryAdapter
         }
 
-        viewModel.getAllInventory(appDatabase)
+        viewModel.getAllInventory()
         viewModel.inventoryListEvent.observe(viewLifecycleOwner) {
             when (it) {
-                is InventoryListEvent.Loading -> {}
                 is InventoryListEvent.Success -> {
                     inventoryAdapter.submitList(it.inventoryList)
                 }

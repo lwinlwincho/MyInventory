@@ -4,24 +4,27 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.llc.myinventory.database.InventoryItemDao
 import com.llc.myinventory.database.InventoryItemEntity
-import com.llc.myinventory.database.InventoryItemRoomDatabase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 import kotlin.Exception
 
-class DetailInventoryViewModel : ViewModel() {
+@HiltViewModel
+class DetailInventoryViewModel @Inject constructor(
+    private val inventoryItemDao: InventoryItemDao
+) : ViewModel() {
 
     private var _inventoryDetailEvent = MutableLiveData<DetailInventoryEvent>()
     val inventoryDetailEvent: LiveData<DetailInventoryEvent> = _inventoryDetailEvent
 
-    fun getDetail(appDatabase: InventoryItemRoomDatabase, id: Int) {
-
-        _inventoryDetailEvent.value = DetailInventoryEvent.Loading
+    fun getDetail(id: Int) {
 
         viewModelScope.launch {
             try {
                 //get data from offline database
-                val result = appDatabase.inventoryItemDao().getById(id)
+                val result = inventoryItemDao.getById(id)
                 _inventoryDetailEvent.value = DetailInventoryEvent.Success(result)
             } catch (e: Exception) {
                 _inventoryDetailEvent.value = DetailInventoryEvent.Error(e.message.toString())
@@ -33,12 +36,11 @@ class DetailInventoryViewModel : ViewModel() {
         return (item.quantityInStock > 0)
     }
 
-    fun sellItem(appDatabase: InventoryItemRoomDatabase, newItem: InventoryItemEntity) {
+    fun sellItem(newItem: InventoryItemEntity) {
         viewModelScope.launch {
             if (newItem.quantityInStock > 0) {
                 try {
-                    appDatabase.inventoryItemDao()
-                        .updateQuantity(newItem.id, newItem.quantityInStock)
+                    inventoryItemDao.updateQuantity(newItem.id, newItem.quantityInStock)
                     _inventoryDetailEvent.value = DetailInventoryEvent.Success(newItem)
                 } catch (e: Exception) {
                     _inventoryDetailEvent.value = DetailInventoryEvent.Error(e.message.toString())
@@ -47,10 +49,10 @@ class DetailInventoryViewModel : ViewModel() {
         }
     }
 
-    fun deleteItem(appDatabase: InventoryItemRoomDatabase, item: InventoryItemEntity) {
+    fun deleteItem(item: InventoryItemEntity) {
         viewModelScope.launch {
             try {
-                appDatabase.inventoryItemDao().delete(item)
+                inventoryItemDao.delete(item)
             } catch (e: Exception) {
                 _inventoryDetailEvent.value = DetailInventoryEvent.Error(e.message.toString())
             }
@@ -59,7 +61,6 @@ class DetailInventoryViewModel : ViewModel() {
 }
 
 sealed class DetailInventoryEvent {
-    object Loading : DetailInventoryEvent()
     object Deleted : DetailInventoryEvent()
     data class Success(val detailInventory: InventoryItemEntity) : DetailInventoryEvent()
     data class Error(val error: String) : DetailInventoryEvent()

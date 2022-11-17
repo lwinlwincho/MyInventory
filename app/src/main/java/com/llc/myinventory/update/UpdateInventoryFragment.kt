@@ -10,10 +10,13 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.llc.myinventory.database.InventoryItemEntity
-import com.llc.myinventory.database.InventoryItemRoomDatabase
+import com.llc.myinventory.database.InventoryRoomDatabase
 import com.llc.myinventory.databinding.FragmentUpdateInventoryBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class UpdateInventoryFragment : Fragment() {
+
     private var _binding: FragmentUpdateInventoryBinding? = null
     private val binding get() = _binding!!
 
@@ -21,10 +24,10 @@ class UpdateInventoryFragment : Fragment() {
 
     private val args: UpdateInventoryFragmentArgs by navArgs()
 
-    private val appDatabase by lazy {
-        InventoryItemRoomDatabase.getDatabase(requireContext())
+   /* private val appDatabase by lazy {
+        InventoryRoomDatabase.getDatabase(requireContext())
     }
-
+*/
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -33,13 +36,29 @@ class UpdateInventoryFragment : Fragment() {
         return binding.root
     }
 
-    //return true if the edit text are not empty
-    private fun isEntryValid(): Boolean {
-        return viewModel.isEntryValid(
-            binding.edtItemName.text.toString(),
-            binding.edtItemPrice.text.toString(),
-            binding.edtItemQuantity.text.toString(),
-        )
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewModel.showItem(args.id)
+
+        viewModel.updateUiEvent.observe(viewLifecycleOwner) {
+            when (it) {
+                is UpdateInventoryEvent.SuccessShow -> {
+                    bind(it.updateInventoryEvent)
+                }
+                is UpdateInventoryEvent.SuccessUpdate -> {
+                    findNavController().navigateUp()
+                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
+                }
+                is UpdateInventoryEvent.Error -> {
+                    Toast.makeText(requireContext(), it.error, Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+
+        binding.backArrow.setOnClickListener {
+            findNavController().navigateUp()
+        }
     }
 
     private fun bind(item: InventoryItemEntity) {
@@ -52,10 +71,18 @@ class UpdateInventoryFragment : Fragment() {
         }
     }
 
+    //return true if the edit text are not empty
+    private fun isEntryValid(): Boolean {
+        return viewModel.isEntryValid(
+            binding.edtItemName.text.toString(),
+            binding.edtItemPrice.text.toString(),
+            binding.edtItemQuantity.text.toString(),
+        )
+    }
+
     private fun update() {
         if (isEntryValid()) {
             viewModel.updateItem(
-                appDatabase = appDatabase,
                 id = args.id,
                 itemName = binding.edtItemName.text.toString(),
                 itemPrice = binding.edtItemPrice.text.toString(),
@@ -64,30 +91,5 @@ class UpdateInventoryFragment : Fragment() {
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        viewModel.showItem(appDatabase, args.id)
-
-        viewModel.updateUiEvent.observe(viewLifecycleOwner) {
-            when (it) {
-                is UpdateInventoryEvent.Loading -> {}
-                is UpdateInventoryEvent.SuccessShow -> {
-                    bind(it.updateInventoryEvent)
-                }
-                is UpdateInventoryEvent.Error -> {
-                    Toast.makeText(requireContext(), it.error, Toast.LENGTH_LONG).show()
-                }
-                is UpdateInventoryEvent.SuccessUpdate -> {
-                    findNavController().navigateUp()
-                    Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
-                }
-            }
-        }
-
-        binding.backArrow.setOnClickListener {
-            findNavController().navigateUp()
-        }
-    }
 }
 

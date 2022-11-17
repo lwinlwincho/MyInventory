@@ -8,9 +8,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.llc.myinventory.database.InventoryItemRoomDatabase
 import com.llc.myinventory.databinding.FragmentAddInventoryBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class AddInventoryFragment : Fragment() {
 
     private var _binding: FragmentAddInventoryBinding? = null
@@ -18,10 +19,9 @@ class AddInventoryFragment : Fragment() {
 
     private val viewModel: AddInventoryViewModel by viewModels()
 
-    private val appDatabase by lazy {
-        InventoryItemRoomDatabase.getDatabase(requireContext())
-    }
-
+   /* private val appDatabase by lazy {
+        InventoryRoomDatabase.getDatabase(requireContext())
+    }*/
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,15 +29,6 @@ class AddInventoryFragment : Fragment() {
     ): View {
         _binding = FragmentAddInventoryBinding.inflate(inflater, container, false)
         return binding.root
-    }
-
-    //return true if the edit text are not empty
-    private fun isEntryValid(): Boolean {
-        return viewModel.isEntryValid(
-            binding.edtItemName.text.toString(),
-            binding.edtItemPrice.text.toString(),
-            binding.edtItemQuantity.text.toString(),
-        )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -58,7 +49,6 @@ class AddInventoryFragment : Fragment() {
         binding.saveAction.setOnClickListener {
             if (isEntryValid()) {
                 viewModel.addInventory(
-                    appDatabase = appDatabase,
                     itemName = binding.edtItemName.text.toString(),
                     itemPrice = binding.edtItemPrice.text.toString(),
                     quantityInStock = binding.edtItemQuantity.text.toString()
@@ -69,5 +59,14 @@ class AddInventoryFragment : Fragment() {
         binding.backArrow.setOnClickListener {
             findNavController().navigateUp()
         }
+    }
+
+    //return true if the edit text are not empty
+    private fun isEntryValid(): Boolean {
+        return viewModel.isEntryValid(
+            binding.edtItemName.text.toString(),
+            binding.edtItemPrice.text.toString(),
+            binding.edtItemQuantity.text.toString(),
+        )
     }
 }

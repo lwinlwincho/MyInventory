@@ -33,6 +33,7 @@ class InventoryAdapter(
         private var binding: ItemInventoryBinding,
         private val onItemClicked: (InventoryItemEntity) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
+
         fun bind(inventoryItemEntity: InventoryItemEntity) {
             with(binding) {
                 itemName.text = inventoryItemEntity.itemName

@@ -1,5 +1,6 @@
 package com.llc.myinventory.detail_inventory
 
+
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,10 +13,12 @@ import androidx.navigation.fragment.navArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.llc.myinventory.R
 import com.llc.myinventory.database.InventoryItemEntity
-import com.llc.myinventory.database.InventoryItemRoomDatabase
+import com.llc.myinventory.database.InventoryRoomDatabase
 import com.llc.myinventory.databinding.FragmentDetailInventoryBinding
 import com.llc.myinventory.extension.getFormattedPrice
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class DetailInventoryFragment : Fragment() {
 
     private var _binding: FragmentDetailInventoryBinding? = null
@@ -25,10 +28,10 @@ class DetailInventoryFragment : Fragment() {
 
     private val args: DetailInventoryFragmentArgs by navArgs()
 
-    private val appDatabase by lazy {
-        InventoryItemRoomDatabase.getDatabase(requireContext())
+    /*private val appDatabase by lazy {
+        InventoryRoomDatabase.getDatabase(requireContext())
     }
-
+*/
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -40,10 +43,9 @@ class DetailInventoryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.getDetail(appDatabase, args.id)
+        viewModel.getDetail(args.id)
         viewModel.inventoryDetailEvent.observe(viewLifecycleOwner) {
             when (it) {
-                is DetailInventoryEvent.Loading -> {}
                 is DetailInventoryEvent.Success -> {
                     bind(it.detailInventory)
                 }
@@ -66,10 +68,10 @@ class DetailInventoryFragment : Fragment() {
             sellItem.setOnClickListener {
                 val newItem = item.copy(quantityInStock = item.quantityInStock - 1)
                 viewModel.sellItem(
-                    appDatabase = appDatabase,
                     newItem = newItem
                 ) // update database
             }
+
             editItem.setOnClickListener { editItem(item) }
             deleteItem.setOnClickListener { showConfirmationDialog(item) }
             backArrow.setOnClickListener {
@@ -97,7 +99,7 @@ class DetailInventoryFragment : Fragment() {
     }
 
     private fun deleteItem(item: InventoryItemEntity) {
-        viewModel.deleteItem(appDatabase, item)
+        viewModel.deleteItem(item)
     }
 
     override fun onDestroyView() {
